@@ -55,7 +55,7 @@ $( "#query" )
         	var requestData = {};
         	requestData.table = "Dictionary";
         	var queryJSON = {};
-        	queryJSON.attribute = "English";
+        	queryJSON.attribute = "EnglishSummary";
         	queryJSON.op = "CONTAINS";
         	queryJSON.values = [query];
 
@@ -77,7 +77,7 @@ $( "#query" )
                           if (wordObject == undefined) {
                         	  break;
                           }
-                          wordArray[i] = {label: wordObject["Kana"][0]["reb"], value: wordObject["WordID"]["s"]};
+                          wordArray[i] = {label: wordObject["EnglishSummary"] + ":" + wordObject["Kana"][0], value: wordObject["WordID"]};
                       }
                       response(wordArray);
                 }
@@ -94,7 +94,8 @@ $( "#query" )
             // add the selected item
             runningList.push(ui.item.value);
             // alert(runningList);
-            terms.push( ui.item.label);
+            var engAndJap = ui.item.label;
+            terms.push(engAndJap.split(":")[1]);
             // add placeholder to get the space at the end
             terms.push( "" );
             this.value = terms.join( " " );
@@ -110,6 +111,7 @@ $( "#query" )
                 ] ), {
                     position: "absolute",
                     visibility: "hidden",
+                    "word-wrap": "break-word",
                     "padding-right": 0,
                     "border-right": 0,
                     "white-space": "pre"
