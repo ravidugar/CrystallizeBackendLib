@@ -36,8 +36,28 @@ function mysubmit() {
     for (var i = 0; i < runningList.length; i++) {
         responseArray[i] = {FormID:0, Tags:null, WordID: runningList[i]};
     }
-    //TODO: Add code to send running list to backend.
-    alert(responseArray);
+
+    // Create a HTTP request to query database
+	var insertData = {};
+	insertData.table = "Phrases";
+	insertData.ID = "4"; //TODO: Change this
+	insertData.document = {}
+	insertData.document.PhraseSequence = responseArray;
+	
+	console.log(insertData);
+	
+	// AJAX POST request to get query results
+    $.ajax({
+        type: "POST",
+        url: "Insert",
+        data: JSON.stringify(insertData),
+        dataType: 'json',
+        contentType: 'application/json;charset=UTF-8',
+        crossDomain: true,
+        success: function( res ) {
+        	if(!res.ok) alert("Failed to submit translation")
+        	}
+    	});
 }
 
 $(function(){
