@@ -4,22 +4,19 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
 
-/**
- * @author ravidugar
- *
- */
 public class TestQuery {
-final static String queryURL = "http://localhost:8080/CrystallizeBackendLib/Query";
+	final static String queryURL = "http://localhost:8080/CrystallizeBackendLib/Query";
 	
 	public JSONArray query(String table, JSONArray queryItems, JSONArray filters) throws JSONException, IOException {
 		JSONObject parameters = new JSONObject();
-		parameters.put("table", "Test");
+		parameters.put("table", table);
 		parameters.put("query", queryItems);
 		if(filters != null) parameters.put("filters", filters);
 		
@@ -205,6 +202,18 @@ final static String queryURL = "http://localhost:8080/CrystallizeBackendLib/Quer
 		assertEquals((document.put("ID", "1")).toString(), results.getJSONObject(0).toString());
 		
 		TestDelete.deleteObject("Test", "1");
+	}
+	
+	@Test
+	public void testDictionary() throws JSONException, IOException {
+		// Query Item
+		JSONObject queryItem = new JSONObject();
+		queryItem.put("attribute", "English");
+		queryItem.put("op", "CONTAINS");
+		queryItem.put("values", new JSONArray().put("dance"));
+
+		JSONArray results = query("Dictionary", new JSONArray().put(queryItem), null);
+		System.out.println(results);
 	}
 	
 	public static void allFeatureTest() throws JSONException, IOException {

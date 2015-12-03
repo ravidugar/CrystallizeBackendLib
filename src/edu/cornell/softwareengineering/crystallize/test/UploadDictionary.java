@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import com.google.common.io.Files;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,22 +18,18 @@ import org.json.XML;
 import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.PutItemOutcome;
 import com.amazonaws.services.dynamodbv2.document.Table;
+import com.google.common.io.Files;
 
 import edu.cornell.softwareengineering.crystallize.util.common.DynamoDBClient;
 
-/**
- * @author ravidugar
- *
- */
 public class UploadDictionary {
 
 	public static void main(String[] args) throws JSONException, IOException {
-		uploadDictionary(10);
+		uploadDictionary();
 	}
 	public static String readFile(String path, Charset encoding) throws IOException 
     {
     	String s = Files.toString(new File(path), StandardCharsets.UTF_8);
-//    	System.out.println("Read file = "+s);
     	return s;
     }
 	public static void writeFile(String path, byte[] data) throws IOException 
@@ -46,53 +41,81 @@ public class UploadDictionary {
     	    stream.close();
     	}
     }
-	public static void uploadDictionary(int entriesCount) throws JSONException, IOException {
+	public static void uploadDictionary() throws JSONException, IOException {
 		String filename = "./data/JMdict_e.xml";
 		try {
 		    JSONObject obj = XML.toJSONObject(readFile(filename, StandardCharsets.UTF_8));
 
 		    JSONObject JMdict = obj.getJSONObject("JMdict");
 		    JSONArray entries = JMdict.getJSONArray("entry");
+		    System.out.println(entries.length());
 		    
-		    long beginTime = System.currentTimeMillis();
-		    
-		    List<Item> itemList = new ArrayList<Item>();
-//		    for(int i = 0; i < entries.length(); i++) {
-		    for(int i = 0; i < entriesCount; i++) {
+		    for(int i = 0; i < 100; i++) {
+		    	System.out.println("Writing: " + i);
 		    	JSONObject entry = entries.getJSONObject(i);
-		    	//System.out.println(entry.toString());
-		    	
+
+		    	//System.out.println(entry);
 		    	if(entry.has("ent_seq")) {
 		    		Item item = new Item().withPrimaryKey("WordID", String.valueOf(entry.getInt("ent_seq")));
 		    		
 			    	// Add English translation string
 			    	if(entry.has("sense")) {
-			    		String sensesString = getSensesString(JSONObject.wrap(entry.get("sense")));
-						if(!sensesString.equals("")) item.withString("English", sensesString);
-
-			    	}   	
+			    		List<Map<String, ?>> english = getSensesList(JSONObject.wrap(entry.get("sense")));
+			    		String englishSummary = "";
+			    		
+			    		for(Map<String, ?> sense : english) {
+			    			if(sense.containsKey("gloss") && sense.get("gloss") instanceof String) {
+			    				String senseString = (String) sense.get("gloss");
+				    			if(!englishSummary.equals("")) englishSummary += "; ";
+				    			englishSummary += senseString;
+			    			}
+			    		}
+			    		
+			    		if(!english.isEmpty()) item.withList("English", english);
+						if(!englishSummary.equals("")) item.withString("EnglishSummary", englishSummary);
+						
+//						if(entry.getJSONObject("sense").has("pos")) {
+//							item.withString("PartOfSpeech", entry.getJSONObject("sense").getString("pos"));
+//						}
+			    	}
 			    	
 			    	// Add Kana Character list
 			    	if(entry.has("r_ele")) {
-			    		List<Map<String, String>> kanaObjects = getKanaList(JSONObject.wrap(entry.get("r_ele")));
-						if(!kanaObjects.isEmpty()) item.withList("Kana", kanaObjects);
+			    		List<String> kanaObjects = getKanaList(JSONObject.wrap(entry.get("r_ele")));
+						if(!kanaObjects.isEmpty()) {
+							item.withList("Kana", kanaObjects);
+							
+							String kanaSummary = "";
+				    		for(String kana : kanaObjects) {
+					    		if(!kanaSummary.equals("")) kanaSummary += ", ";
+					    		kanaSummary += kana;
+				    		}
+				    		item.withString("KanaSummary", kanaSummary);
+						}
 			    	}
 			    	
+			    	// Add Kana Character list
+			    	if(entry.has("k_ele")) {
+			    		List<String> kanjiObjects = getKanjiList(JSONObject.wrap(entry.get("k_ele")));
+						if(!kanjiObjects.isEmpty()) {
+							item.withList("Kanji", kanjiObjects);
+							
+							String kanjiSummary = "";
+				    		for(String kanji : kanjiObjects) {
+					    		if(!kanjiSummary.equals("")) kanjiSummary += ", ";
+					    		kanjiSummary += kanji;
+				    		}
+				    		item.withString("KanjiSummary", kanjiSummary);
+						}
+			    	}
+			    	
+			    	System.out.println(item);
 			    	//Store item
 			    	Table table = DynamoDBClient.getTable("Dictionary");
-			    	itemList.add(item);
-//			    	System.out.println(item.toString());
-			    	table.putItem(item);
+			    	PutItemOutcome result = table.putItem(item);
+			    	System.out.println(result);
 		    	}
 		    }
-//		    DynamoDB dynamoDB = new DynamoDB(DynamoDBClient.getDynamoClient());
-//		    
-//			TableWriteItems batchWriteRequest = new TableWriteItems("Dictionary")
-//				.withItemsToPut(itemList);
-//			
-//		    BatchWriteItemOutcome result = dynamoDB.batchWriteItem(batchWriteRequest);
-//		    System.out.println(result.toString());
-		    System.out.println("Duration: " + (System.currentTimeMillis() - beginTime));
 		    
 		}
 		catch (IOException e){
@@ -110,9 +133,11 @@ public class UploadDictionary {
 	 *			separated by "|"
 	 *		EX. "personality, individuality | TV personality, celebrity"
 	 */
-	public static String getSensesString(Object sensesObject) throws JSONException {
-    	String sensesString = "";
+	public static List<Map<String, ?>> getSensesList(Object sensesObject) throws JSONException {
+		List<Map<String, ?>> sensesList = new ArrayList<Map<String, ?>>();
 		JSONArray senses;
+		
+		Map<String, Object> newSense = new HashMap<String, Object>();
 		
 		// sense attribute can be a single object or list of objects
 		if(sensesObject instanceof JSONArray) {
@@ -125,70 +150,107 @@ public class UploadDictionary {
 			senses = new JSONArray();
 		}
     	for(int senseIndex = 0; senseIndex < senses.length(); senseIndex++) {
-    		if(!sensesString.equals("")) sensesString += " | ";
-    		
     		JSONObject sense = senses.getJSONObject(senseIndex);
     		
-    		Object glossObject = JSONObject.wrap(sense.get("gloss"));
-    		JSONArray glosses;
-
-    		if(glossObject instanceof JSONArray) {
-    			glosses = (JSONArray) glossObject;
-    			//System.out.println(senses.toString());
-    		}
-    		else if(glossObject instanceof String) {
-    			glosses = new JSONArray().put(glossObject);
-    		}
-    		else { 
-    			glosses = new JSONArray();
-    		}
-	    	
-    		// Each sense can have multiple English translations
-	    	String senseString = "";
-	    	for(int glossIndex = 0; glossIndex < glosses.length(); glossIndex++) {
-	    		if(!senseString.equals("")) senseString += ", ";
-	    		Object value = glosses.get(glossIndex);
+    		if(sense.has("gloss")) {
+	    		Object glossObject = JSONObject.wrap(sense.get("gloss"));
+	    		JSONArray glosses;
+	
+	    		if(glossObject instanceof JSONArray) {
+	    			glosses = (JSONArray) glossObject;
+	    			//System.out.println(senses.toString());
+	    		}
+	    		else if(glossObject instanceof String) {
+	    			glosses = new JSONArray().put(glossObject);
+	    		}
+	    		else { 
+	    			glosses = new JSONArray();
+	    		}
 	    		
-	    		if(value instanceof String) {
-	    			if(value != null) senseString += glosses.getString(glossIndex);
+	    		// Each sense can have multiple English translations
+		    	String senseString = "";
+		    	for(int glossIndex = 0; glossIndex < glosses.length(); glossIndex++) {
+		    		if(!senseString.equals("")) senseString += ", ";
+		    		Object value = glosses.get(glossIndex);
+		    		
+		    		if(value instanceof String) {
+		    			if(value != null) senseString += glosses.getString(glossIndex);
+		    		}
+		    	}
+		    	if(!senseString.equals("")) newSense.put("gloss", senseString);
+    		}
+    		
+	    	if(sense.has("pos")) {
+	    		Object POSObject = JSONObject.wrap(sense.get("pos"));
+	    		JSONArray POS;
+	
+	    		if(POSObject instanceof JSONArray) {
+	    			POS = (JSONArray) POSObject;
+	    			//System.out.println(senses.toString());
+	    		}
+	    		else if(POSObject instanceof String) {
+	    			POS = new JSONArray().put(POSObject);
 	    		}
 	    		else {
-	    			System.out.println(value.toString());
+	    			POS = new JSONArray();
 	    		}
+	    		
+	    		List<String> POSArray = new ArrayList<String>();
+	       		for(int posIdx = 0; posIdx < POS.length(); posIdx++) {
+	    			POSArray.add(POS.getString(posIdx));
+	    		}
+	       		
+	       		newSense.put("pos", POSArray);
 	    	}
-	    	sensesString += senseString;
+    		
+    		
+    		sensesList.add(newSense);
     	}
     	
-    	return sensesString;
+    	return sensesList;
 	}
 	
-	public static List<Map<String, String>> getKanaList(Object kanaObject) throws JSONException {
-		List<Map<String, String>> kanaObjects = new ArrayList<Map<String, String>>();
+	public static List<String> getKanaList(Object kanaObject) throws JSONException {
+		List<String> kanaChars = new ArrayList<String>();
 
-		JSONArray kana;
-		
+		JSONArray kanaJSONArray;
 		if(kanaObject instanceof JSONArray) {
-			kana = (JSONArray) kanaObject;
+			kanaJSONArray = (JSONArray) kanaObject;
 		}
 		else if(kanaObject instanceof JSONObject) {
-			kana = new JSONArray().put((JSONObject) kanaObject);
+			kanaJSONArray = new JSONArray().put((JSONObject) kanaObject);
 		}
 		else {
-			kana = new JSONArray();
+			kanaJSONArray = new JSONArray();
 		}
 		
-		for(int j = 0; j < kana.length(); j++) {
-			JSONObject newJSON = kana.getJSONObject(j);
-			Map<String, String> newObj = new HashMap<String, String>();
-			for(String name : JSONObject.getNames(newJSON)) {
-				if(name.equals("reb")) newObj.put(name, newJSON.getString(name));
-				//System.out.println(newJSON.getString(name));
-				byte[] bytes = newJSON.getString(name).getBytes(StandardCharsets.UTF_8);
-				System.out.println(new String(bytes));
-			}
-			kanaObjects.add(newObj);
+		for(int j = 0; j < kanaJSONArray.length(); j++) {
+			JSONObject newJSON = kanaJSONArray.getJSONObject(j);
+			if(newJSON.has("reb")) kanaChars.add(newJSON.getString("reb"));
 		}
 		
-		return kanaObjects;
+		return kanaChars;
+    }
+	
+	public static List<String> getKanjiList(Object kanjiObject) throws JSONException {
+		List<String> kanjiChars = new ArrayList<String>();
+
+		JSONArray kanjiJSONArray;
+		if(kanjiObject instanceof JSONArray) {
+			kanjiJSONArray = (JSONArray) kanjiObject;
+		}
+		else if(kanjiObject instanceof JSONObject) {
+			kanjiJSONArray = new JSONArray().put((JSONObject) kanjiObject);
+		}
+		else {
+			kanjiJSONArray = new JSONArray();
+		}
+		
+		for(int j = 0; j < kanjiJSONArray.length(); j++) {
+			JSONObject newJSON = kanjiJSONArray.getJSONObject(j);
+			if(newJSON.has("keb")) kanjiChars.add(newJSON.getString("keb"));
+		}
+		
+		return kanjiChars;
     }
 }

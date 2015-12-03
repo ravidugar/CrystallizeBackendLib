@@ -8,21 +8,18 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/**
- * @author ravidugar
- *
- */
 public class TestInsert {
-	final static String insertURL = "http://localhost:8080/CrystallizeDynamoBackend/Insert";
+	final static String insertURL = "http://localhost:8080/CrystallizeBackendLib/Insert";
 
 	public static void main(String[] args) throws JSONException, IOException {	
-		
-		JSONObject test = new JSONObject()
-			.put("int", 1)
-			.put("long", 2109841204)
-			.put("double", 1.2)
-			.put("bool", false);
-		System.out.println(test);
+		TestJSON();
+		//		
+//		JSONObject test = new JSONObject()
+//			.put("int", 1)
+//			.put("long", 2109841204)
+//			.put("double", 1.2)
+//			.put("bool", false);
+//		System.out.println(test);
 		//complexTest();
 		//uploadPlayer("54321", "./data/ConcernedSheep.json");
 	}
@@ -100,6 +97,21 @@ public class TestInsert {
 		} finally {
 		    br.close();
 		}
+	}
+	
+	public static void TestJSON() throws JSONException, IOException {
+		JSONObject document = new JSONObject("{'ID':'ae1d850d-0326-4458-ab62-ae21d777a61d','Reviews':{'Reviews':[]},'KanaReviews':{'Reviews':[]},'PersonalData':{'Name':'Player','TotalPlayTimeTicks':0,'TotalPlayTime':'00:00:00','StartPlayTime':'0001-01-01T00:00:00','SurveysRequested':0,'Context':{'Elements':[{'Name':'name','Data':{'Translation':'Player','PhraseElements':[{'WordID':101,'FormID':0,'Text':'Player','RomajiText':'Player','Tags':[],'ElementType':101}]}}]}},'WordCollection':null,'PhraseStorage':null,'Tutorial':null,'Proficiency':{'ReviewExperience':0,'Phrases':0,'Words':3,'Confidence':10,'ReserveConfidence':0},'Session':{'BaseMoney':0,'ReducedMoney':-2147483648,'Mistakes':0,'MaxMistakes':0,'RestQuality':0.0,'ChestItem':null,'LegsItem':null,'TodaysCollectedWords':[],'isPromotion':false,'Confidence':10,'Position':[0.0,0.0,0.0],'Area':''},'Money':0,'ScriptType':2}");
+		System.out.println(document);
+		
+    	//Store item
+    	JSONObject parameters = new JSONObject();
+		parameters.put("table", "Players");
+		parameters.put("ID", "5555");
+		parameters.put("document", document);
+
+		System.out.println(parameters.toString());
+		
+	    HTTPConnection.excutePost(insertURL, parameters.toString());
 	}
 
 }

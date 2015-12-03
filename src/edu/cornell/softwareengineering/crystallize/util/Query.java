@@ -1,12 +1,11 @@
-/**
- * 
- */
 package edu.cornell.softwareengineering.crystallize.util;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,10 +19,6 @@ import com.amazonaws.services.dynamodbv2.model.ScanResult;
 
 import edu.cornell.softwareengineering.crystallize.util.common.DynamoDBClient;
 
-/**
- * @author ravidugar
- *
- */
 public class Query {
 	public static String query(JSONObject parameters) throws Exception {
 		String tableName;
@@ -32,10 +27,18 @@ public class Query {
 		
 		try {
 			tableName = parameters.getString("table");
+		} catch (JSONException e) {
+			throw new Exception("Attribute 'table' is not a String as anticipated");
+		}
+		try {
 			query = parameters.getJSONArray("query");
+		} catch (JSONException e) {
+			throw new Exception("Attribute 'query' is not a Map as anticipated");
+		}
+		try {
 			filters = parameters.getJSONArray("filters");
 		} catch (JSONException e) {
-			throw new Exception("Parameter error inside Insert class");
+			throw new Exception("Attribute 'filters' is not a List as anticipated");
 		}
 		
 		AmazonDynamoDBClient dynamoDB = DynamoDBClient.getDynamoClient();
@@ -61,7 +64,7 @@ public class Query {
 		JSONObject resultJSON = new JSONObject();
 		resultJSON.put("ok", true);
 		resultJSON.put("results", refinedResults);
-		System.out.println();
+		
     	return resultJSON.toString();
 	}
 	

@@ -1,6 +1,3 @@
-/**
- * 
- */
 package edu.cornell.softwareengineering.crystallize.util;
 
 import org.json.JSONException;
@@ -11,19 +8,19 @@ import com.amazonaws.services.dynamodbv2.document.Table;
 
 import edu.cornell.softwareengineering.crystallize.util.common.DynamoDBClient;
 
-/**
- * @author ravidugar
- *
- */
 public class Delete {
 	public static String delete(JSONObject parameters) throws Exception {
 		String tableName;
 		String ID;
 		try {
 			tableName = parameters.getString("table");
+		} catch (JSONException e) {
+			throw new Exception("Attribute 'table' is not a String as anticipated");
+		}
+		try {
 			ID = parameters.getString("ID");
 		} catch (JSONException e) {
-			throw new Exception("Parameter error inside Insert class");
+			throw new Exception("Attribute 'ID' is not a String as anticipated");
 		}
 		
 		Table table = DynamoDBClient.getTable(tableName);

@@ -9,47 +9,45 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import edu.cornell.softwareengineering.crystallize.util.Query;
 import edu.cornell.softwareengineering.crystallize.util.common.ParameterParser;
 
 /**
- * Servlet implementation class QueryServlet
+ * Servlet implementation class Query
  */
 public class QueryServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
     public QueryServlet() {
         super();
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		PrintWriter out = response.getWriter();
 		response.setContentType("application/json");
 		response.setCharacterEncoding("utf-8");
+		PrintWriter out = response.getWriter();
+		
 		JSONObject parameters;
 		try {
 			parameters = ParameterParser.getParameterObject(request);
 			JSONObject refinedParams = refineParameters(parameters);
 			String result = Query.query(refinedParams);
 			out.append(result);
-			
 		} catch (Exception e) {
-			out.append(e.getMessage());
-			e.printStackTrace();
+			JSONObject failureJSON = new JSONObject();
+			try {
+				failureJSON.put("ok", false);
+				failureJSON.put("message", e.getMessage());
+			} catch (JSONException e1) {
+				out.append(e.getMessage());
+			}
+			out.append(failureJSON.toString());
 		}
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 	}

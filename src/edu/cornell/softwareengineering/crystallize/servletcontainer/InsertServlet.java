@@ -8,27 +8,23 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import edu.cornell.softwareengineering.crystallize.util.Insert;
 import edu.cornell.softwareengineering.crystallize.util.common.ParameterParser;
 
 /**
- * Servlet implementation class InsertServlet
+ * Servlet implementation class Insert
  */
 public class InsertServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
+
     public InsertServlet() {
-        super();
+    	super();
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter out = response.getWriter();
 		JSONObject parameters;
@@ -39,14 +35,17 @@ public class InsertServlet extends HttpServlet {
 			out.append(result);
 			
 		} catch (Exception e) {
-			out.append(e.getMessage());
-			e.printStackTrace();
+			JSONObject failureJSON = new JSONObject();
+			try {
+				failureJSON.put("ok", false);
+				failureJSON.put("message", e.getMessage());
+			} catch (JSONException e1) {
+				out.append(e.getMessage());
+			}
+			out.append(failureJSON.toString());
 		}
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 	}
@@ -80,4 +79,5 @@ public class InsertServlet extends HttpServlet {
 		
 		return refined;
 	}
+
 }
