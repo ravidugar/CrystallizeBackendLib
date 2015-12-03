@@ -1,6 +1,12 @@
 var runningList = new Array();
 
 document.addEventListener("keydown", KeyCheck);
+
+/**
+ * Checks if key pressed was backspace,
+ * Deletes the last word in the running list 
+ * if backspace was pressed.
+ */
 function KeyCheck(event)
 {
    var KeyID = event.keyCode;
@@ -21,11 +27,16 @@ function KeyCheck(event)
    }
 }
 
+/**
+ * Sends the running list to the backend
+ */
 function mysubmit() {
     var responseArray = new Array();
+    // Creates the appropriate JSON objects
     for (var i = 0; i < runningList.length; i++) {
         responseArray[i] = {FormID:0, Tags:null, WordID: runningList[i]};
     }
+    //TODO: Add code to send running list to backend.
     alert(responseArray);
 }
 
@@ -33,6 +44,8 @@ $(function(){
 function split( val ) {
     return val.split( / \s*/ );
 }
+
+// Gets the last word in the textbox
 function extractLast( term ) {
     return split( term ).pop();
 }
@@ -50,8 +63,10 @@ $( "#query" )
         minLength: 1,
         source: function( request, response ) {
         	
-            // delegate back to autocomplete, but extract the last term
+        	// Get the last word in the textbox
         	var query = extractLast( request.term );
+        	
+        	// Create a HTTP request to query database
         	var requestData = {};
         	requestData.table = "Dictionary";
         	var queryJSON = {};
@@ -62,6 +77,7 @@ $( "#query" )
         	requestData.query = [queryJSON];
         	console.log(requestData);
         	
+        	// AJAX POST request to get query results
             $.ajax({
                 type: "POST",
                 url: "Query",
@@ -72,6 +88,8 @@ $( "#query" )
                 success: function( res ) {
                       var wordArray = new Array();
                       var wordObjectArray = res["results"];
+                      // Only display 10 results at a time
+                      // Display english_translation:japanese and store wordID as value
                       for (i=0; i < 11; i++) {
                           wordObject = wordObjectArray[i];
                           if (wordObject == undefined) {
@@ -79,6 +97,7 @@ $( "#query" )
                           }
                           wordArray[i] = {label: wordObject["EnglishSummary"] + ":" + wordObject["Kana"][0], value: wordObject["WordID"]};
                       }
+                      // Return array of results for autocomplete to display
                       response(wordArray);
                 }
             	});
@@ -89,13 +108,18 @@ $( "#query" )
         },
         select: function( event, ui ) {
             var terms = split( this.value );
+            
             // remove the current input
             terms.pop();
-            // add the selected item
+            
+            // add the wordID of selected item to the running list
             runningList.push(ui.item.value);
-            // alert(runningList);
+            
+            // Get the japanese word from the label
+            // To be displayed in the textbox on selection
             var engAndJap = ui.item.label;
             terms.push(engAndJap.split(":")[1]);
+            
             // add placeholder to get the space at the end
             terms.push( "" );
             this.value = terms.join( " " );
