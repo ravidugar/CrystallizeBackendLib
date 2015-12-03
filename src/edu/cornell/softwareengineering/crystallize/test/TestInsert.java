@@ -106,7 +106,7 @@ public class TestInsert {
     	//Store item
     	JSONObject parameters = new JSONObject();
 		parameters.put("table", "Players");
-		parameters.put("ID", "5555");
+		parameters.put("ID", "12345");
 		parameters.put("document", document);
 
 		System.out.println(parameters.toString());

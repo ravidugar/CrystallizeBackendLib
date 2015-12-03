@@ -1,22 +1,18 @@
 package edu.cornell.softwareengineering.crystallize.test;
 
-import org.json.JSONObject;   
+import org.json.JSONObject;  
+import org.json.JSONException;  
 import org.json.XML;  
 import java.io.*;  
-
-/**
- * @author ravidugar
- *
- */
 public class XMLtoJSON{  
 ///////////THIS IS NOT THE RIGHT CODE, LOOK IN XMLtoJSONParser
 	public static void main(String[] args) throws Exception   
   {  
       String fileName = "C:\\Users\\Eileen Liu\\Desktop\\JMdict_e.xml";
-      InputStream inputStream = new FileInputStream(fileName);  
       try  
       {  
           File file = new File ("C:\\Users\\Eileen Liu\\Desktop\\JMdict_e.json");
+          InputStream inputStream = new FileInputStream(fileName);  
           System.out.println("here");
           StringBuilder builder =  new StringBuilder();  
           int ptr = 0;  
@@ -50,6 +46,7 @@ public class XMLtoJSON{
           bufferedWriter.close();
 
 
+
       }
 
 
@@ -69,8 +66,5 @@ public class XMLtoJSON{
           {  
               e.printStackTrace();  
           }
-      finally {
-    	  inputStream.close();
-      }
   }  
 }

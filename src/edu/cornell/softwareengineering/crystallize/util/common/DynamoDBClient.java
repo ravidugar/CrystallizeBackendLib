@@ -1,6 +1,3 @@
-/**
- * 
- */
 package edu.cornell.softwareengineering.crystallize.util.common;
 
 import com.amazonaws.AmazonClientException;
@@ -15,10 +12,6 @@ import com.amazonaws.services.dynamodbv2.model.DescribeTableRequest;
 import com.amazonaws.services.dynamodbv2.model.TableDescription;
 import com.amazonaws.services.dynamodbv2.util.Tables;
 
-/**
- * @author ravidugar
- *
- */
 public class DynamoDBClient {
 	private static AmazonDynamoDBClient dynamoClient;
 	private static DynamoDB dynamoDB;
@@ -82,5 +75,5 @@ public class DynamoDBClient {
                     + "such as not being able to access the network.");
             System.out.println("Error Message: " + ace.getMessage());
         }
-    }
+    }	
 }

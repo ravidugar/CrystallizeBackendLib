@@ -42,7 +42,7 @@ public class QueryServlet extends HttpServlet {
 				failureJSON.put("ok", false);
 				failureJSON.put("message", e.getMessage());
 			} catch (JSONException e1) {
-				out.append(e.getMessage());
+				out.append(e1.getMessage());
 			}
 			out.append(failureJSON.toString());
 		}

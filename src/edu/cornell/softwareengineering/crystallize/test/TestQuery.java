@@ -46,6 +46,36 @@ public class TestQuery {
 		
 		TestDelete.deleteObject("Test", "1");
 	}
+	
+	@Test
+	public void basicTest2() throws JSONException, IOException {
+		TestInsert.insertObject("Test", "1", new JSONObject().put("grade", 99.5));
+		
+		JSONArray query = new JSONArray();
+				
+		JSONObject queryItem = new JSONObject();
+		queryItem.put("attribute", "grade");
+		queryItem.put("op", "EQ");
+		queryItem.put("values", new JSONArray().put(99.5));
+		query.put(queryItem);
+		
+		queryItem = new JSONObject();
+		queryItem.put("attribute", "grade");
+		queryItem.put("op", "LE");
+		queryItem.put("values", new JSONArray().put(99.5));
+		query.put(queryItem);
+		
+		queryItem = new JSONObject();
+		queryItem.put("attribute", "grade");
+		queryItem.put("op", "GE");
+		queryItem.put("values", new JSONArray().put(99.5));
+		query.put(queryItem);
+
+		JSONArray results = query("Test", query, null);
+		assertEquals(results.length(), 1);
+		
+		TestDelete.deleteObject("Test", "1");
+	}
 
 	@Test
 	public void multiValueSingleFieldTest() throws JSONException, IOException {

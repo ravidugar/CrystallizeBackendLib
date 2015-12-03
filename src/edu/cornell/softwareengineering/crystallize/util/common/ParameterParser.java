@@ -1,6 +1,3 @@
-/**
- * 
- */
 package edu.cornell.softwareengineering.crystallize.util.common;
 
 import java.io.BufferedReader;
@@ -11,10 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/**
- * @author ravidugar
- *
- */
 public class ParameterParser {
 	public static JSONObject getParameterObject(HttpServletRequest request) throws IOException, JSONException {
 		StringBuffer jb = new StringBuffer();

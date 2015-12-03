@@ -5,12 +5,8 @@ import java.io.IOException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/**
- * @author ravidugar
- *
- */
 public class TestDelete {
-	final static String deleteURL = "http://localhost:8080/CrystallizeDynamoBackend/Delete";
+	final static String deleteURL = "http://localhost:8080/CrystallizeBackendLib/Delete";
 	
 	public static void main(String[] args) throws JSONException, IOException {
 		basicTest();

@@ -86,9 +86,25 @@ public class Query {
 			expression += "(";
 			for(int valueIndex = 0; valueIndex < values.length(); valueIndex++) {
 				if(valueIndex > 0) expression += " OR ";
-				String value = values.getString(valueIndex);
+				Object value = JSONObject.wrap(values.get(valueIndex));
 				String valueKey = ":value" + (valueKeyID++);
-				valueMap.put(valueKey, new AttributeValue().withS(value));
+				
+				if(value instanceof Double) {
+					String valueString = ((Double) value).toString();
+					valueMap.put(valueKey, new AttributeValue().withN(valueString));
+				}
+				else if(value instanceof Integer) {
+					String valueString = ((Integer) value).toString();
+					valueMap.put(valueKey, new AttributeValue().withN(valueString));
+				}
+				else if(value instanceof Long) {
+					String valueString = ((Long) value).toString();
+					valueMap.put(valueKey, new AttributeValue().withN(valueString));
+				}
+				else {
+					String valueString = values.getString(valueIndex);
+					valueMap.put(valueKey, new AttributeValue().withS(valueString));
+				}
 				
 				expression += getExpression(attribute, valueKey, operator);
 			}
@@ -115,9 +131,9 @@ public class Query {
 		else if (operator.equals(ComparisonOperator.LE.toString()))
 			return attribute + " <= " + value;
 		else if (operator.equals(ComparisonOperator.GT.toString()))
-			return attribute + " >= " + value;
-		else if (operator.equals(ComparisonOperator.GE.toString()))
 			return attribute + " > " + value;
+		else if (operator.equals(ComparisonOperator.GE.toString()))
+			return attribute + " >= " + value;
 		
 		//String Operators
 		else if (operator.equals(ComparisonOperator.BEGINS_WITH.toString()))
