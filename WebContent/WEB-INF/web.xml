@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
+  <display-name>CrystallizeBackendLib</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+  <servlet>
+    <description>Deletes data from Dynamo DB</description>
+    <display-name>DeleteServlet</display-name>
+    <servlet-name>DeleteServlet</servlet-name>
+    <servlet-class>edu.cornell.softwareengineering.crystallize.servletcontainer.DeleteServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DeleteServlet</servlet-name>
+    <url-pattern>/Delete</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description>Insert or update a collection</description>
+    <display-name>InsertServlet</display-name>
+    <servlet-name>InsertServlet</servlet-name>
+    <servlet-class>edu.cornell.softwareengineering.crystallize.servletcontainer.InsertServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>InsertServlet</servlet-name>
+    <url-pattern>/Insert</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description>Queries for data</description>
+    <display-name>QueryServlet</display-name>
+    <servlet-name>QueryServlet</servlet-name>
+    <servlet-class>edu.cornell.softwareengineering.crystallize.servletcontainer.QueryServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>QueryServlet</servlet-name>
+    <url-pattern>/Query</url-pattern>
+  </servlet-mapping>
+</web-app>

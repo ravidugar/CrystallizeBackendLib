@@ -1,0 +1,185 @@
+body {
+            font-family: OpenSansLight;
+            width: 100%;
+        }
+
+        p {
+            font-size: medium;
+            text-wrap: normal;
+        }
+
+        .smallSpace {
+            padding-bottom: 26px;
+        }
+
+        .space {
+            padding-bottom: 50px;
+        }
+
+        #container {
+        }
+
+            #container .column {
+                position: relative;
+                float: left;
+            }
+
+        #back {
+            width: 100%;
+            display: block;
+        }
+
+        #center {
+            font-family: OpenSansLight;
+            width: 700px;
+            display: block;
+            padding-left:calc((100% - 700px) * 0.5);
+            padding-right:calc((100% - 700px) * 0.5);
+        }
+
+        #left {
+            width: 200px;
+            right: 200px;
+            margin-left: -100%;
+        }
+
+        #right {
+            width: 200px;
+            margin-right: -100%;
+        }
+
+        #footer {
+            clear: both;
+        }
+
+        /* IE hack */
+        * html #left {
+            left: 150px;
+        }
+
+        /* Make the columns the same height as each other */
+        #container {
+            overflow: hidden;
+        }
+
+            #container .column {
+                padding-bottom: 1001em;
+                margin-bottom: -1000em;
+            }
+
+        /* Fix for the footer */
+        * html body {
+            overflow: hidden;
+        }
+
+        * html #footer-wrapper {
+            float: left;
+            position: relative;
+            width: 100%;
+            padding-bottom: 10010px;
+            margin-bottom: -10000px;
+            background: #fff;
+        }
+
+        /* Aesthetics */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Sans-serif;
+            line-height: 1.5em;
+        }
+
+        p {
+            color: #555;
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+            nav ul a {
+                color: darkgreen;
+                text-decoration: none;
+            }
+
+        #header, #footer {
+            font-size: large;
+            background: #6C7583;
+        }
+
+        #left {
+            width:200px;
+            background-position-x:left;
+            background: black;
+        }
+
+        #right {
+            background: #FDFDF3;
+        }
+
+        #center {
+            background: #FDFDFD;
+        }
+
+        #container .column {
+            padding-top: 1em;
+        }
+
+        img {
+            max-width: 92%;
+            max-height: 100%;
+            height: auto;
+            padding-left: 14px;
+            padding-right: 40px;
+        }
+
+        .leftImg {
+            height: 200px;
+            float: left;
+        }
+
+        .rightImg {
+            height: 200px;
+            float: right;
+        }
+
+        .box {
+            width: 100%;
+            height: 280px;
+        }
+
+        .myfooter {
+            width: 100%;
+            height: 300px;
+            background-color: #6C7583;
+        }
+
+        @font-face {
+            font-family: OpenSansLight;
+            src: url('segoeui.ttf');
+        }
+
+        @font-face {
+            font-family: LightFont;
+            src: url('segoeuil.ttf');
+        }
+
+        .title {
+            font-family: LightFont;
+            font-weight:100;
+            padding: 7px;
+            color: #FDFDFD;
+            background-color:#3C3F45;
+        }
+
+        .bottom-three {
+            font-family: LightFont;
+            font-size: 100px;
+            font-weight: 100;
+            padding-top: 20vh;
+            padding-bottom: 20vh;
+            text-align: center;
+            color: #FDFDFD;
+        }
