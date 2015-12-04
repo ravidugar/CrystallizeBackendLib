@@ -84,11 +84,10 @@ public class Insert {
 		    updateExp, // UpdateExpression
 		    expressionAttributeNames,
 		    expressionAttributeValues);
-		
+		result.getUpdateItemResult().toString();
 		
 		JSONObject resultJSON = new JSONObject();
 		resultJSON.put("ok", true);
-		resultJSON.put("results", result);
 		
     	return resultJSON.toString();
 	}
