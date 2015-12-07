@@ -12,7 +12,7 @@ import org.junit.Test;
 
 public class TestQuery {
 	//final static String queryURL = "http://localhost:8080/CrystallizeBackendLib/Query";
-	final static String queryURL = "http://demo-ujyzsgm9iz.elasticbeanstalk.com/Query";
+	final static String queryURL = "http://test-ym6pb4mj8s.elasticbeanstalk.com//Query";
 	
 	public JSONArray query(String table, JSONArray queryItems, JSONArray filters) throws JSONException, IOException {
 		JSONObject parameters = new JSONObject();

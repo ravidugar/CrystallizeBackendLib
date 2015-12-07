@@ -9,7 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class TestInsert {
-	final static String insertURL = "http://demo-ujyzsgm9iz.elasticbeanstalk.com/Insert";
+	final static String insertURL = "http://test-ym6pb4mj8s.elasticbeanstalk.com/Insert";
 
 	public static void main(String[] args) throws JSONException, IOException {	
 		TestJSON();

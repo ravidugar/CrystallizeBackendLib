@@ -41,12 +41,22 @@
   </servlet-mapping>
   <servlet>
     <description>Servlet for adding Dynamo tables</description>
-    <display-name>TableServlet</display-name>
-    <servlet-name>TableServlet</servlet-name>
-    <servlet-class>edu.cornell.softwareengineering.crystallize.servletcontainer.TableServlet</servlet-class>
+    <display-name>AddTableServlet</display-name>
+    <servlet-name>AddTableServlet</servlet-name>
+    <servlet-class>edu.cornell.softwareengineering.crystallize.servletcontainer.AddTableServlet</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>TableServlet</servlet-name>
-    <url-pattern>/Table</url-pattern>
+    <servlet-name>AddTableServlet</servlet-name>
+    <url-pattern>/AddTable</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description>Servlet for deleting Dynamo tables</description>
+    <display-name>DeleteTableServlet</display-name>
+    <servlet-name>DeleteTableServlet</servlet-name>
+    <servlet-class>edu.cornell.softwareengineering.crystallize.servletcontainer.DeleteTableServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DeleteTableServlet</servlet-name>
+    <url-pattern>/DeleteTable</url-pattern>
   </servlet-mapping>
 </web-app>

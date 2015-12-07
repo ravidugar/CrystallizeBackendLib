@@ -13,13 +13,16 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import edu.cornell.softwareengineering.crystallize.util.Tables;
+import edu.cornell.softwareengineering.crystallize.util.TableMethods;
 import edu.cornell.softwareengineering.crystallize.util.common.ParameterParser;
 
-public class TableServlet extends HttpServlet {
+/**
+ * Servlet implementation class DeleteTableServlet
+ */
+public class DeleteTableServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	public TableServlet() {
+	public DeleteTableServlet() {
         super();
     }
 
@@ -29,7 +32,7 @@ public class TableServlet extends HttpServlet {
 		try {
 			parameters = ParameterParser.getParameterObject(request);
 			JSONObject refinedParams = refineParameters(parameters);
-			String result = Tables.createTable(refinedParams);
+			String result = TableMethods.deleteTable(refinedParams);
 			out.append(result);
 		} catch (Exception e) {
 			JSONObject failureJSON = new JSONObject();
@@ -58,48 +61,7 @@ public class TableServlet extends HttpServlet {
 			else { throw new Exception("Parameter 'table' is empty"); }
 		}
 		else { throw new Exception("Parameter 'table' missing"); }
-		
-		// check key parameter
-		if(parameters.has("key")) {
-			JSONObject key = parameters.getJSONObject("key");
-			String[] keyOps = {"String", "Number"};
-			List<String> keyOpsList = Arrays.asList(keyOps);
-			
-			if(!key.has("name") || key.getString("name") == "") {
-				throw new Exception("Parameter 'key' missing 'name' attribute");
-			}
-			if(!key.has("type") || !keyOpsList.contains(key.getString("type"))) {
-				throw new Exception("Parameter 'type' in 'key' must be either 'String' or 'Number'");
-			}
-			
-			refined.put("key", key);
-		}
-		else { throw new Exception("Parameter 'key' missing"); }
-		
-		
-		// check key parameter
-		if(parameters.has("throughput")) {
-			JSONObject throughput = parameters.getJSONObject("throughput");
-			if(throughput.has("read")) {
-				if(throughput.getInt("read") <= 0) {
-					throw new Exception("Parameter 'read' of 'throughput' must be a positive integer");
-				}
-			}
-			else {
-				throw new Exception("Parameter 'throughput' has no 'read' attribute");
-			}
-			if(throughput.has("write")) {
-				if(throughput.getInt("write") <= 0) {
-					throw new Exception("Parameter 'write' of 'throughput' must be a positive integer");
-				}
-			}
-			else {
-				throw new Exception("Parameter 'throughput' has no 'write' attribute");
-			}
-			refined.put("throughput", throughput);
-		}
-		else { throw new Exception("Parameter 'throughput' missing"); }
+
 		return refined;
 	}
-
 }

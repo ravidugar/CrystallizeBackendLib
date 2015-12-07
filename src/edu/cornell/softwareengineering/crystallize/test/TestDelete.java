@@ -6,7 +6,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class TestDelete {
-	final static String deleteURL = "http://demo-ujyzsgm9iz.elasticbeanstalk.com/Delete";
+	final static String deleteURL = "http://test-ym6pb4mj8s.elasticbeanstalk.com//Delete";
 	
 	public static void main(String[] args) throws JSONException, IOException {
 		basicTest();
