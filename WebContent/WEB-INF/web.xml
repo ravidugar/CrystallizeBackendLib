@@ -39,4 +39,14 @@
     <servlet-name>QueryServlet</servlet-name>
     <url-pattern>/Query</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description>Servlet for adding Dynamo tables</description>
+    <display-name>TableServlet</display-name>
+    <servlet-name>TableServlet</servlet-name>
+    <servlet-class>edu.cornell.softwareengineering.crystallize.servletcontainer.TableServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>TableServlet</servlet-name>
+    <url-pattern>/Table</url-pattern>
+  </servlet-mapping>
 </web-app>

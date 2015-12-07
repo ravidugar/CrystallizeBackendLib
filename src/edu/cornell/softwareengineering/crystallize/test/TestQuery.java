@@ -12,7 +12,8 @@ import org.json.JSONObject;
 import org.junit.Test;
 
 public class TestQuery {
-	final static String queryURL = "http://localhost:8080/CrystallizeBackendLib/Query";
+	//final static String queryURL = "http://localhost:8080/CrystallizeBackendLib/Query";
+	final static String queryURL = "http://presentation-9cbfqv4eji.elasticbeanstalk.com/Query";
 	
 	public JSONArray query(String table, JSONArray queryItems, JSONArray filters) throws JSONException, IOException {
 		JSONObject parameters = new JSONObject();
