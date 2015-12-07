@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
-import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,7 +12,7 @@ import org.junit.Test;
 
 public class TestQuery {
 	//final static String queryURL = "http://localhost:8080/CrystallizeBackendLib/Query";
-	final static String queryURL = "http://presentation-9cbfqv4eji.elasticbeanstalk.com/Query";
+	final static String queryURL = "http://demo-ujyzsgm9iz.elasticbeanstalk.com/Query";
 	
 	public JSONArray query(String table, JSONArray queryItems, JSONArray filters) throws JSONException, IOException {
 		JSONObject parameters = new JSONObject();

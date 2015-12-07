@@ -1,21 +1,17 @@
 package edu.cornell.softwareengineering.crystallize.test;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-//import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Locale;
-import com.google.common.io.Files;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.XML;
+
+import com.google.common.io.Files;
 
 public class XMLtoJSONParser {
     public static int PRETTY_PRINT_INDENT_FACTOR = 4;
@@ -49,7 +45,6 @@ public class XMLtoJSONParser {
     		"&v2w",
 };
 	public static void main(String[] args) {
-		JSONObject json = new JSONObject();
 		try {
 			String in = "C:\\Eileen\\Programming\\CrystallizeBackend\\data\\JMdict_sample.xml";
         	String out = "C:\\Eileen\\Programming\\CrystallizeBackend\\data\\JMdict_sample.json";
@@ -97,6 +92,7 @@ public class XMLtoJSONParser {
 	    {
 	    	PrintStream ps = new PrintStream(path, "UTF-8");
 	    	ps.println(data); 
+	    	ps.close();
 	    }
 	    public static void writeFile(String path, byte[] data) throws IOException 
 	    {

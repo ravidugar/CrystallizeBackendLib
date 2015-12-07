@@ -9,13 +9,15 @@ import org.json.JSONObject;
 import org.junit.Test;
 
 public class TestTable {
-	public static String tableURL = "http://localhost:8080/CrystallizeBackendLib/Table";
+//	public static String tableURL = "http://localhost:8080/CrystallizeBackendLib/Table";
+	public static String tableURL = "http://demo-ujyzsgm9iz.elasticbeanstalk.com/Table";
+
 	
 	@Test
 	public void testAddTable() throws JSONException, IOException {
 		JSONObject throughput = new JSONObject();
-		throughput.put("read", 5);
-		throughput.put("write", 5);
+		throughput.put("read", 10);
+		throughput.put("write", 10);
 		
 		JSONObject key = new JSONObject();
 		key.put("name", "ID");
@@ -29,7 +31,7 @@ public class TestTable {
 		
 		JSONObject output = new JSONObject(HTTPConnection.excutePost(tableURL, parameters.toString()));
 		System.out.println(output.toString());
-		assertTrue(output.getBoolean("ok") == false);
+		assertTrue(output.getBoolean("ok") == true);
 	}
 	
 	@Test
@@ -56,7 +58,7 @@ public class TestTable {
 	@Test
 	public void testNonExistingType() throws JSONException, IOException {
 		JSONObject throughput = new JSONObject();
-		throughput.put("read", -5);
+		throughput.put("read", 5);
 		throughput.put("write", 5);
 		
 		JSONObject key = new JSONObject();

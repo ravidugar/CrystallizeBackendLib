@@ -2,7 +2,6 @@ package edu.cornell.softwareengineering.crystallize.servletcontainer;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -14,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import edu.cornell.softwareengineering.crystallize.util.Insert;
 import edu.cornell.softwareengineering.crystallize.util.Tables;
 import edu.cornell.softwareengineering.crystallize.util.common.ParameterParser;
 

@@ -12,10 +12,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.amazonaws.services.dynamodbv2.document.Item;
-import com.amazonaws.services.dynamodbv2.document.PutItemOutcome;
 import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.dynamodbv2.document.UpdateItemOutcome;
-import com.amazonaws.services.dynamodbv2.model.PutItemResult;
 
 import edu.cornell.softwareengineering.crystallize.util.common.DynamoDBClient;
 

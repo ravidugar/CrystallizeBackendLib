@@ -8,14 +8,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import edu.cornell.softwareengineering.crystallize.util.Delete;
 import edu.cornell.softwareengineering.crystallize.util.common.ParameterParser;
 
-/**
+/**	
  * Servlet implementation class Delete
  */
 public class DeleteServlet extends HttpServlet {

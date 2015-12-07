@@ -1,9 +1,14 @@
 package edu.cornell.softwareengineering.crystallize.test;
 
-import org.json.JSONObject;  
-import org.json.JSONException;  
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+
+import org.json.JSONObject;
 import org.json.XML;  
-import java.io.*;  
 public class XMLtoJSON{  
 ///////////THIS IS NOT THE RIGHT CODE, LOOK IN XMLtoJSONParser
 	public static void main(String[] args) throws Exception   
@@ -44,7 +49,7 @@ public class XMLtoJSON{
           }
 
           bufferedWriter.close();
-
+          inputStream.close();
 
 
       }

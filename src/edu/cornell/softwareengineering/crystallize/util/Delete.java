@@ -3,7 +3,6 @@ package edu.cornell.softwareengineering.crystallize.util;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.amazonaws.services.dynamodbv2.document.DeleteItemOutcome;
 import com.amazonaws.services.dynamodbv2.document.Table;
 
 import edu.cornell.softwareengineering.crystallize.util.common.DynamoDBClient;
@@ -25,7 +24,7 @@ public class Delete {
 		
 		Table table = DynamoDBClient.getTable(tableName);
 		
-		DeleteItemOutcome result = table.deleteItem("ID", ID);
+		table.deleteItem("ID", ID);
 		
 		JSONObject resultJSON = new JSONObject();
 		resultJSON.put("ok", true);
