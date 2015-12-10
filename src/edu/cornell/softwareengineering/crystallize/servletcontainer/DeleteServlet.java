@@ -49,6 +49,15 @@ public class DeleteServlet extends HttpServlet {
 		doGet(request, response);
 	}
 	
+	/*
+	 * Creates new parameter object with parameter fields 'table' and 'ID' in the
+	 * format expected by the Delete subclass, throws exceptions if attributes
+	 * malformed
+	 * 
+	 * @param parameters - JSONObject of parameters from the request
+	 * 
+	 * @return JSONObject of properly parsed parameters 
+	 */
 	private JSONObject refineParameters(JSONObject parameters) throws Exception {
 		JSONObject refined = new JSONObject();
 		if(parameters.length() == 0) throw new Exception("No parameters found");

@@ -1,4 +1,4 @@
-package edu.cornell.softwareengineering.crystallize.test;
+package edu.cornell.softwareengineering.crystallize.dictionary;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -50,7 +50,7 @@ public class UploadDictionary {
 		    JSONArray entries = JMdict.getJSONArray("entry");
 		    System.out.println(entries.length());
 		    
-		    for(int i = 0; i < 100; i++) {
+		    for(int i = 0; i < entries.length(); i++) {
 		    	System.out.println("Writing: " + i);
 		    	JSONObject entry = entries.getJSONObject(i);
 
@@ -74,9 +74,6 @@ public class UploadDictionary {
 			    		if(!english.isEmpty()) item.withList("English", english);
 						if(!englishSummary.equals("")) item.withString("EnglishSummary", englishSummary);
 						
-//						if(entry.getJSONObject("sense").has("pos")) {
-//							item.withString("PartOfSpeech", entry.getJSONObject("sense").getString("pos"));
-//						}
 			    	}
 			    	
 			    	// Add Kana Character list
@@ -94,7 +91,7 @@ public class UploadDictionary {
 						}
 			    	}
 			    	
-			    	// Add Kana Character list
+			    	// Add Kanji Character list
 			    	if(entry.has("k_ele")) {
 			    		List<String> kanjiObjects = getKanjiList(JSONObject.wrap(entry.get("k_ele")));
 						if(!kanjiObjects.isEmpty()) {
@@ -210,6 +207,13 @@ public class UploadDictionary {
     	return sensesList;
 	}
 	
+	/*
+	 * Returns a list of Kana characters from the translation object
+	 * 
+	 *  @param kanaObject - object from 'r_ele' attribute of translation
+	 *  
+	 *  @return String List object of Kana spellings, empty List if none found
+	 */
 	public static List<String> getKanaList(Object kanaObject) throws JSONException {
 		List<String> kanaChars = new ArrayList<String>();
 
@@ -232,6 +236,13 @@ public class UploadDictionary {
 		return kanaChars;
     }
 	
+	/*
+	 * Returns a list of Kanji characters from the translation object
+	 * 
+	 *  @param kanaObject - object from 'k_ele' attribute of translation
+	 *  
+	 *  @return String List object of Kanji spellings, empty List if none found
+	 */
 	public static List<String> getKanjiList(Object kanjiObject) throws JSONException {
 		List<String> kanjiChars = new ArrayList<String>();
 

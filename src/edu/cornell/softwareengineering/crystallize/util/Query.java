@@ -82,36 +82,42 @@ public class Query {
 			JSONArray values = queryItem.getJSONArray("values");
 			
 			expression += "(";
-			for(int valueIndex = 0; valueIndex < values.length(); valueIndex++) {
-				if(valueIndex > 0) expression += " OR ";
-				Object value = JSONObject.wrap(values.get(valueIndex));
+			if(operator.equals(ComparisonOperator.NOT_NULL.toString()) || operator.equals(ComparisonOperator.NULL.toString())) {
 				String valueKey = ":value" + (valueKeyID++);
-				
-				if(value instanceof Double) {
-					String valueString = ((Double) value).toString();
-					valueMap.put(valueKey, new AttributeValue().withN(valueString));
-				}
-				else if(value instanceof Integer) {
-					String valueString = ((Integer) value).toString();
-					valueMap.put(valueKey, new AttributeValue().withN(valueString));
-				}
-				else if(value instanceof Long) {
-					String valueString = ((Long) value).toString();
-					valueMap.put(valueKey, new AttributeValue().withN(valueString));
-				}
-				else {
-					String valueString = values.getString(valueIndex);
-					valueMap.put(valueKey, new AttributeValue().withS(valueString));
-				}
-				
+				valueMap.put(valueKey, new AttributeValue().withS("NULL"));
 				expression += getExpression(attribute, valueKey, operator);
+			}
+			else {
+				for(int valueIndex = 0; valueIndex < values.length(); valueIndex++) {
+					if(valueIndex > 0) expression += " OR ";
+					Object value = JSONObject.wrap(values.get(valueIndex));
+					String valueKey = ":value" + (valueKeyID++);
+					
+					if(value instanceof Double) {
+						String valueString = ((Double) value).toString();
+						valueMap.put(valueKey, new AttributeValue().withN(valueString));
+					}
+					else if(value instanceof Integer) {
+						String valueString = ((Integer) value).toString();
+						valueMap.put(valueKey, new AttributeValue().withN(valueString));
+					}
+					else if(value instanceof Long) {
+						String valueString = ((Long) value).toString();
+						valueMap.put(valueKey, new AttributeValue().withN(valueString));
+					}
+					else {
+						String valueString = values.getString(valueIndex);
+						valueMap.put(valueKey, new AttributeValue().withS(valueString));
+					}
+					
+					expression += getExpression(attribute, valueKey, operator);
+				}
 			}
 			expression += ")";
 		}
 		
-		request
-			.withFilterExpression(expression)
-			.withExpressionAttributeValues(valueMap);
+		request.withFilterExpression(expression);
+		if(!valueMap.isEmpty()) request.withExpressionAttributeValues(valueMap);
 		
 		return request;
 	}
@@ -137,9 +143,9 @@ public class Query {
 		else if (operator.equals(ComparisonOperator.BEGINS_WITH.toString()))
 			return "begins_with(" + attribute + ", " + value + ")";
 		else if (operator.equals(ComparisonOperator.NOT_NULL.toString()))
-			return "attribute_exists(" + attribute + ")";
+			return "NOT attribute_type(" + attribute + ", " + value + ")";
 		else if (operator.equals(ComparisonOperator.NULL.toString()))
-			return "attribute_not_exists(" + attribute + ")";
+			return "attribute_type(" + attribute + ", " + value + ")";
 		
 		//String & Set Operators
 		else if (operator.equals(ComparisonOperator.CONTAINS.toString()))

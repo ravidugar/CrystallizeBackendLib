@@ -16,8 +16,8 @@ public class TestTable {
 	@Before 
 	public void init() {
 		addTableURL = TestConstants.getAddTableURL();
-		System.out.println(addTableURL);
 		deleteTableURL = TestConstants.getDeleteTableURL();
+		System.out.println(addTableURL);
 		System.out.println(deleteTableURL);
 	}
 	

@@ -1,4 +1,4 @@
-package edu.cornell.softwareengineering.crystallize.test;
+package edu.cornell.softwareengineering.crystallize.dictionary;
 
 import java.io.BufferedWriter;
 import java.io.File;

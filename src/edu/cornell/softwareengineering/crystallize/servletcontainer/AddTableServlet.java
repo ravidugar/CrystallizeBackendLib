@@ -47,6 +47,15 @@ public class AddTableServlet extends HttpServlet {
 		doGet(request, response);
 	}
 	
+	/*
+	 * Creates new parameter object with parameter fields 'table', 'key', and 'throughput'
+	 * in the format expected by the TableMethods subclass, throws exceptions if attributes
+	 * malformed
+	 * 
+	 * @param parameters - JSONObject of parameters from the request
+	 * 
+	 * @return JSONObject of properly parsed parameters 
+	 */
 	private JSONObject refineParameters(JSONObject parameters) throws Exception {
 		JSONObject refined = new JSONObject();
 		if(parameters.length() == 0) throw new Exception("No parameters found");
@@ -77,7 +86,7 @@ public class AddTableServlet extends HttpServlet {
 		else { throw new Exception("Parameter 'key' missing"); }
 		
 		
-		// check key parameter
+		// check throughput parameter
 		if(parameters.has("throughput")) {
 			JSONObject throughput = parameters.getJSONObject("throughput");
 			if(throughput.has("read")) {
