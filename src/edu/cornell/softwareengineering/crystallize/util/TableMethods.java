@@ -19,6 +19,7 @@ import edu.cornell.softwareengineering.crystallize.util.common.DynamoDBClient;
 
 public class TableMethods {
 	public static String createTable(JSONObject parameters) throws Exception {
+		// Check parameters
 		String tableName;
 		JSONObject key;
 		JSONObject throughput;
@@ -38,10 +39,12 @@ public class TableMethods {
 			throw new Exception("Attribute 'throughput' is not a JSON object as anticipated");
 		}
 		
+		// Ensure the table does not already exist
 		if(tableExists(tableName)) {
 			throw new Exception("Table " + tableName + " already exists");
 		}
 		
+		// Define Primary Key from 'key' attribute
 		AttributeDefinition keyAttribute = new AttributeDefinition();
 		keyAttribute.withAttributeName(key.getString("name"));
 		if(key.getString("type").equals("String")) {
@@ -55,12 +58,12 @@ public class TableMethods {
 		}
 		ArrayList<AttributeDefinition> attributeDefinitions = new ArrayList<AttributeDefinition>();
 		attributeDefinitions.add(keyAttribute);
-		
 		ArrayList<KeySchemaElement> keySchema = new ArrayList<KeySchemaElement>();
 		keySchema.add(new KeySchemaElement()
 				.withAttributeName(key.getString("name"))
 				.withKeyType(KeyType.HASH)); //Partition key
 		
+		// Add specifications from 'throughput' attribute
 		CreateTableRequest request = new CreateTableRequest()
 				.withTableName(tableName)
 				.withKeySchema(keySchema)
@@ -88,13 +91,15 @@ public class TableMethods {
 	}
 	
 	public static String deleteTable(JSONObject parameters) throws Exception {
+		// Check parameters
 		String tableName;
 		try {
 			tableName = parameters.getString("table");
 		} catch (JSONException e) {
 			throw new Exception("Attribute 'table' is not a String as anticipated");
 		}
-
+		
+		// Ensure that the table actually exists
 		if(!tableExists(tableName)) {
 			throw new Exception("Table " + tableName + " does not exist");
 		}

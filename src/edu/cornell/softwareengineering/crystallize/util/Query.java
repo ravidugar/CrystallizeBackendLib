@@ -19,6 +19,7 @@ import edu.cornell.softwareengineering.crystallize.util.common.DynamoDBClient;
 
 public class Query {
 	public static String query(JSONObject parameters) throws Exception {
+		// Check parameters
 		String tableName;
 		JSONArray query;
 		JSONArray filters;
@@ -41,7 +42,7 @@ public class Query {
 		
 		AmazonDynamoDBClient dynamoDB = DynamoDBClient.getDynamoClient();
 		
-		// Create list of attributes to retrieve
+		// Create filter expression to specify attributes to retrieve
 		String filterString = "";
 		for(int i = 0; i < filters.length(); i++) {
 			if(!filterString.equals("")) filterString += ", ";
@@ -49,13 +50,11 @@ public class Query {
 		}
 		
 		ScanRequest request = getScanRequest(tableName, query);
-		
 		if(!filterString.equals("")) request.setProjectionExpression(filterString);
-		
 		ScanResult result = dynamoDB.scan(request);
-		
+
+		// Parse results
 		List<Map<String, AttributeValue>> items = result.getItems();
-		
 		JSONArray DynamoResults = new JSONArray(items);
 		JSONArray refinedResults = refineResults(DynamoResults);
 		
@@ -66,6 +65,17 @@ public class Query {
     	return resultJSON.toString();
 	}
 	
+	/*
+	 * Creates a scan request given the array of items in the query, according
+	 * to the scan requests that DynamoDB expects. For each item in the query,
+	 * matches the correct condition expression, using the specified attribute
+	 * and casting each item in the list of values
+	 * 
+	 * @param tableName - name of the table to query
+	 * @param query - list of query items to process
+	 * 
+	 * @return ScanRequest object to be submitted to DynamoDB
+	 */
 	private static ScanRequest getScanRequest(String tableName, JSONArray query) throws JSONException {
 		ScanRequest request = new ScanRequest(tableName);
 		

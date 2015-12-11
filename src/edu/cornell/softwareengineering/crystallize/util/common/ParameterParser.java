@@ -9,6 +9,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class ParameterParser {
+
+	// Reads in parameters from HTTP request object
 	public static JSONObject getParameterObject(HttpServletRequest request) throws IOException, JSONException {
 		StringBuffer jb = new StringBuffer();
 		String line = null;

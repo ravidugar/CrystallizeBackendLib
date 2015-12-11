@@ -1,0 +1,44 @@
+Crystallize Backend Library
+---------------------------------
+---------------------------------
+
+The Crystallize Backend Library contains code to facilitate communications between our .NET driver and DynamoDB, a NoSQL Database Amazon Web Services. This code provides contains four java packages, two of which provide the framework for processing HTTP web requests, one that provides a testing suite that can be run with JUNIT, and another that provides tools to parse and store entries from the JMDICT xml file, a dataset of Japanese-English translations. The breakdown of the packages is as follows:
+
+ServletContainer
+edu.cornell.softwareengineering.crystallize.servletcontainer
+----------------
+This package contains all of the servlets that provide the five functionalities of adding tables, deleting tables, inserting documents, querying documents and deleting documents. Each servlet class is named after the specific function it facilitates. Additionally, the mapping for these servlets can be found in the web.xml file at WebContent/WEB-INF/web.xml. For simplicity each servlet matches to an identical URL (i.e. "/Delete" maps to DeleteServlet). These servlet classes make use of classes in the corresponding util and util.common packages for functionality.
+
+Util
+edu.cornell.softwareengineering.crystallize.util
+----
+This package contians Java classes that do all of the parsing of request objects from the POST/GET web service calls to the servlets. There are four classes (Insert, Delete, Query, and TableMethods) that map to each of the servlets, except for TableMethods which provides methods to both AddTableServlet and DeleteTableServlet. These classes extract the required parameters from these request objects, and throw an error if there are any parameter mismatches. Additionally, these classes make use of a nested Common library for connections to DynamoDB from DynamoDBClient.java.
+
+Test
+edu.cornell.softwareengineering.crystallize.test
+----
+This package contains necessary testing methods for table creation/deletion (TestTable.java) and for inserting, querying, and deleting documents in DynamoDB (TestMethods.java) independent of the Java Servlets. These testing classes can be run as Java Applications and utilize HTTP protocol to communicate with the Java Servlets at a specific URL. These two testing suites make use of a TestConstants.java class for the servlet URL, an HTTPConnection.java class to facilitate HTTP connections to the servlets, and a utils class TestUtils.java for simplified inserting/querying/deleting methods.
+
+Dictionary
+edu.cornell.softwareengineering.crystallize.dictionary
+----------
+This package contains tools for parsing and sending insert requests DIRECTLY to DynamoDB. One class XMLtoJSONParser.java, provides methods to parse the JMDICT xml in the data folder. UploadDictionary.java then parses the entries, and uses the DynamoDBClient.java class from Util.Common to directly upload to the "Dictionary" table in a DynamoDB instance.
+
+
+Installation
+------------
+------------
+Import the Project into Eclipse as an existing project with AWS plugin tools installed. Ensure that you're AWS Credentials are properly loaded, then either Run the project on a local Tomcat server or publish to AWS Beanstalk.
+
+Futher information on this process can be found in the Step-by-step guide to Eclispe with AWS. 
+
+
+Contacts
+--------
+--------
+The CS 5150 Team:
+Peter Baker - prb76@cornell.edu
+Ravi Dugar - rd398@cornell.edu
+Manvi Malik - md2365@cornell.edu
+Tanvi Mehta - tmm259@cornell.edu
+Eileen Liu - el544@cornell.edu

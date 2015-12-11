@@ -9,6 +9,7 @@ import edu.cornell.softwareengineering.crystallize.util.common.DynamoDBClient;
 
 public class Delete {
 	public static String delete(JSONObject parameters) throws Exception {
+		// Check parameters
 		String tableName;
 		String ID;
 		try {

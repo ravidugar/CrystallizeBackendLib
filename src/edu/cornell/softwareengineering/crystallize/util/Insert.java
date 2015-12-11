@@ -19,6 +19,7 @@ import edu.cornell.softwareengineering.crystallize.util.common.DynamoDBClient;
 
 public class Insert {
 	public static String upsert(JSONObject parameters) throws Exception {
+		// Check parameters
 		String tableName;
 		String ID;
 		JSONObject document;
@@ -40,10 +41,13 @@ public class Insert {
 		
 		Item item = new Item();
 		
+		// Work-around for the empty String issue in Items
 		String JSONWithoutEmptyStrings = document.toString().replaceAll(":\"\"", ":null");
 
 		JSONObject refinedDocument = new JSONObject(JSONWithoutEmptyStrings);
 		
+		// Iterate through JSON object, casting each attribute and 
+		// adding to a filed in the item to be inserted
 		JSONArray keys = refinedDocument.names();
 		for(int i = 0; i < keys.length(); i++) {
 			String key = keys.getString(i);
@@ -53,9 +57,9 @@ public class Insert {
 			setItemValue(item, key, value);
 		}
 		
-		
 		Table table = DynamoDBClient.getTable(tableName);
 		
+		// Create update expression to update only specified fields
 		String updateExp = "set ";
 		Map<String, String> expressionAttributeNames = new HashMap<String, String>();
 		Map<String, Object> expressionAttributeValues = new HashMap<String, Object>();
@@ -90,6 +94,17 @@ public class Insert {
     	return resultJSON.toString();
 	}
 	
+	
+	/*
+	 * Recurses through a value object, casting the object to an appropriate
+	 * type and storing it on the item
+	 *  
+	 * @param item - item to store casted object to
+	 * @param key - attribute name in item to store the explicit value to
+	 * @param value - value that needs casting
+	 * 
+	 * @return none
+	 */
 	public static void setItemValue(Item item, String key, Object value) throws JSONException {
 		if(value instanceof JSONArray) {
 			JSONArray temp = (JSONArray) value;
