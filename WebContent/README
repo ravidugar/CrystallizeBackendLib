@@ -5,10 +5,10 @@ Overview
 The web application mainly consists of a textbox which has 2 main features:
 
 1. Autocompletion(Word suggestion)
-The user can input English words into the textbox which provides a dropown list of suggested Japanese words that match the translation provided as input. When the user selects an option from the dropdown list, the textbox is populated with the corresponding Japanese word. The user continues to add words into the textbox to generate the desired phrase.
+The user can input English words into the textbox which provides a dropdown list of suggested Japanese words that match the translation provided as input. When the user selects an option from the dropdown list, the textbox is populated with the corresponding Japanese word. The user continues to add words into the textbox to generate the desired phrase.
 
 2. Saving phrase to the database
-Once the user has enetered the desired phrase into the textbox, they can choose to save it as a list of phrase elements into the game database. This is achieved by clicking the submit button.
+Once the user has entered the desired phrase into the textbox, they can choose to save it as a list of phrase elements into the game database. This is achieved by clicking the submit button.
 
 --------------
 Code Structure
