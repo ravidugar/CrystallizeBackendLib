@@ -1,0 +1,27 @@
+--------
+Overview
+--------
+
+The web application mainly consists of a textbox which has 2 main features:
+
+1. Autocompletion(Word suggestion)
+The user can input English words into the textbox which provides a dropown list of suggested Japanese words that match the translation provided as input. When the user selects an option from the dropdown list, the textbox is populated with the corresponding Japanese word. The user continues to add words into the textbox to generate the desired phrase.
+
+2. Saving phrase to the database
+Once the user has enetered the desired phrase into the textbox, they can choose to save it as a list of phrase elements into the game database. This is achieved by clicking the submit button.
+
+--------------
+Code Structure
+--------------
+
+The front end mainly consists of 3 important files: crystallize.js, index.html and crystallize.css.
+index.html and crystallize.css contain the style sheet and the basic layout of the main page which includes the textbox and the submit button. The textbox and the button are linked to javascript and jquery methods that can be found in crystallize.js.
+
+Crystallize.js Methods:
+-----------------------
+
+There are several methods bound to the textbox element(id=query). The .autocomplete widget is used to implement the word suggestion logic. When the user inputs atleast 1 character into the textbox, the autocomplete widget extracts the last word from the input in the textbox, generates a JSON object and sends an HTTP request to the server to query the database. The response is then displayed in the form of a dropdown list.
+The select method bound to the textbox is invoked when the user selects an item from the dropdown list. The selected word is appended to the existing list of words in the textbox. This method also appends the new selected word into a running list of selected words maintained by the front end.
+The open method contains the code to ensure the dropdown list is correctly positioned with respect to the textbox.
+
+The mySubmit function is a Javascript method that generates appropriate JSON objects for the running list of words selected by the user and sends this data using an HTTP request to the server.
