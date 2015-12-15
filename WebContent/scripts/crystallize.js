@@ -2,7 +2,7 @@ var runningList = new Array();
 
 document.addEventListener("keydown", KeyCheck);
 
-/**
+/*
  * Checks if key pressed was backspace,
  * Deletes the last word in the running list 
  * if backspace was pressed.
@@ -12,13 +12,19 @@ function KeyCheck(event)
    var KeyID = event.keyCode;
    switch(KeyID)
    {
+
+      // key code for backspace key
       case 8:
       var text = document.getElementById("query").value;
+      // If textbox has a space in the end, do nothing
       if (text[text.length-1] != " ") {
         var allWords = text.split(" ");
         var wordToRemove = allWords[allWords.length-1];
         text = text.substring(0,text.lastIndexOf(wordToRemove));
+
+        // Populate textbox with all words except the last one(which was removed)
         document.getElementById("query").value = text;
+
         runningList.pop();
       }
       break; 
@@ -27,7 +33,7 @@ function KeyCheck(event)
    }
 }
 
-/**
+/*
  * Sends the running list to the backend
  */
 function mysubmit() {
@@ -70,6 +76,7 @@ function extractLast( term ) {
     return split( term ).pop();
 }
 
+// Invoked when the input in the textbox changes
 $( "#query" )
     // don't navigate away from the field on tab when selecting an item
     .bind( "keydown", function( event ) {
@@ -79,8 +86,11 @@ $( "#query" )
         }
     })
 
+    // Handles the autosuggest
     .autocomplete({
+        // Ensures that we hit the backend only if the textbox has atleast 1 character
         minLength: 1,
+        
         source: function( request, response ) {
         	
         	// Get the last word in the textbox
