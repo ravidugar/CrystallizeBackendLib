@@ -50,7 +50,7 @@ public class UploadDictionary {
 		    JSONArray entries = JMdict.getJSONArray("entry");
 		    System.out.println(entries.length());
 		    
-		    for(int i = 0; i < entries.length(); i++) {
+		    for(int i = 70000; i < entries.length(); i++) {
 		    	System.out.println("Writing: " + i);
 		    	JSONObject entry = entries.getJSONObject(i);
 
@@ -106,11 +106,11 @@ public class UploadDictionary {
 						}
 			    	}
 			    	
-			    	System.out.println(item);
+			    	//System.out.println(item);
 			    	//Store item
 			    	Table table = DynamoDBClient.getTable("Dictionary");
 			    	PutItemOutcome result = table.putItem(item);
-			    	System.out.println(result);
+			    	//System.out.println(result);
 		    	}
 		    }
 		    
